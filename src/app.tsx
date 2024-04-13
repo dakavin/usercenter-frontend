@@ -10,6 +10,11 @@ import { currentUser as queryCurrentUser } from './services/ant-design-pro/api';
 
 const isDev = process.env.NODE_ENV === 'development';
 const loginPath = '/user/login';
+/**
+ * 无序登录态页面
+ */
+const NO_NEED_LOGIN_WHITE_LIST = ['/user/register',loginPath]
+
 
 /** 获取用户信息比较慢的时候会展示一个 loading */
 export const initialStateConfig = {
@@ -31,47 +36,49 @@ export async function getInitialState(): Promise<{
   loading?: boolean;
   fetchUserInfo?: () => Promise<API.CurrentUser | undefined>;
 }> {
+  //前端页面初始化，第一个方法：获取用户信息
   const fetchUserInfo = async () => {
     try {
-      const msg = await queryCurrentUser();
-      return msg.data;
+      return await queryCurrentUser();
     } catch (error) {
-      // history.push(loginPath);
+      console.log("error");
+      history.push(loginPath);
     }
     return undefined;
   };
-  // 如果不是登录页面，执行
-  if (history.location.pathname !== loginPath) {
-    const currentUser = await fetchUserInfo();
+  // 第二个方法：如果不是无需登录的页面，不执行
+  if (NO_NEED_LOGIN_WHITE_LIST.includes(history.location.pathname)) {
     return {
       fetchUserInfo,
-      currentUser,
       settings: defaultSettings,
     };
   }
+  // 第三个方法：如果是登录页面，获取当前用户信息
+  const currentUser = await fetchUserInfo();
   return {
     fetchUserInfo,
+    currentUser,
     settings: defaultSettings,
   };
 }
 
-// ProLayout 支持的api https://procomponents.ant.design/components/layout
+// ProLayout(页面水印) 支持的api https://procomponents.ant.design/components/layout
 export const layout: RunTimeLayoutConfig = ({ initialState, setInitialState }) => {
   return {
     rightContentRender: () => <RightContent />,
     disableContentMargin: false,
     waterMarkProps: {
-      content: initialState?.currentUser?.name,
+      content: initialState?.currentUser?.username,
     },
     footerRender: () => <Footer />,
     onPageChange: () => {
       const { location } = history;
       // 如果没有登录，重定向到 login
-      const whiteList = ['/user/register',loginPath]
-      if (whiteList.includes(location.pathname)){
+
+      if (NO_NEED_LOGIN_WHITE_LIST.includes(location.pathname)){
         return;
       }
-      if (!initialState?.currentUser && location.pathname !== loginPath) {
+      if (!initialState?.currentUser) {
         history.push(loginPath);
       }
     },

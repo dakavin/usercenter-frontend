@@ -75,7 +75,7 @@ const Register: React.FC = () => {
           }}
         >
           <Tabs activeKey={type} onChange={setType}>
-            <Tabs.TabPane key="account" tab={'账号注册'} />
+            <Tabs.TabPane key="account" tab={'新用户注册'} />
           </Tabs>
 
           {type === 'account' && (

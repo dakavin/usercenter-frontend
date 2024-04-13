@@ -36,7 +36,7 @@ export async function getInitialState(): Promise<{
       const msg = await queryCurrentUser();
       return msg.data;
     } catch (error) {
-      history.push(loginPath);
+      // history.push(loginPath);
     }
     return undefined;
   };
@@ -67,6 +67,10 @@ export const layout: RunTimeLayoutConfig = ({ initialState, setInitialState }) =
     onPageChange: () => {
       const { location } = history;
       // 如果没有登录，重定向到 login
+      const whiteList = ['/user/register',loginPath]
+      if (whiteList.includes(location.pathname)){
+        return;
+      }
       if (!initialState?.currentUser && location.pathname !== loginPath) {
         history.push(loginPath);
       }

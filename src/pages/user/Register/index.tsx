@@ -19,13 +19,14 @@ const Register: React.FC = () => {
 
   //表单提交
   const handleSubmit = async (values: API.RegisterParams) => {
+    // 校验
+    const {userPassword,checkPassword} = values;
+    if (userPassword !== checkPassword){
+      message.error('两次输入的密码不一致');
+      return ;
+    }
+
     try {
-      // 校验
-      const {userPassword,checkPassword} = values;
-      if (userPassword !== checkPassword){
-        message.error('两次输入的密码不一致');
-        return ;
-      }
       // 注册
       const id = await register(values);
       //如果user存在

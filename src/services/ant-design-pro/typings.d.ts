@@ -14,6 +14,17 @@ declare namespace API {
     userStatus?: number
     createTime?: Date
     userRole?: number
+    inviteCode?: string
+  };
+
+  /**
+   * 用于对接后端的通用返回
+   */
+  type BaseResponse<T> = {
+    code: number
+    data: T
+    message: string
+    description: string
   };
 
   type LoginResult = {
@@ -67,6 +78,7 @@ declare namespace API {
     userAccount?: string;
     userPassword?: string;
     checkPassword?: string;
+    inviteCode?: string
     // autoLogin?: boolean;
     type?: string;
   };
@@ -80,8 +92,8 @@ declare namespace API {
     success?: boolean;
   };
 
-  type NoticeIconList = {
-    data?: NoticeIconItem[];
+  type UserList = {
+    data?: UserItem[];
     /** 列表的内容总数 */
     total?: number;
     success?: boolean;

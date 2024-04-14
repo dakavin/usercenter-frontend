@@ -8,9 +8,9 @@ import {
   LoginForm,
   ProFormText,
 } from '@ant-design/pro-components';
-import {message, Tabs } from 'antd';
-import React, { useState } from 'react';
-import { history } from 'umi';
+import {message, Tabs} from 'antd';
+import React, {useState} from 'react';
+import {history} from 'umi';
 import styles from './index.less';
 import {BLOG_LINK, SYSTEM_LOGO} from "@/constants";
 
@@ -20,22 +20,22 @@ const Register: React.FC = () => {
   //表单提交
   const handleSubmit = async (values: API.RegisterParams) => {
     // 校验
-    const {userPassword,checkPassword} = values;
-    if (userPassword !== checkPassword){
+    const {userPassword, checkPassword} = values;
+    if (userPassword !== checkPassword) {
       message.error('两次输入的密码不一致');
-      return ;
+      return;
     }
 
     try {
       // 注册
       const id = await register(values);
       //如果user存在
-      if (id > 0) {
+      if (id) {
         const defaultLoginSuccessMessage = '注册成功，请登录！';
         message.success(defaultLoginSuccessMessage);
         /** 此方法会跳转到 redirect 参数所在的位置 */
         if (!history) return;
-        const { query } = history.location;
+        const {query} = history.location;
         // const { redirect } = query as {
         //   redirect: string;
         // };
@@ -44,11 +44,8 @@ const Register: React.FC = () => {
           query
         });
         return;
-      }else{
-        //如果注册失败，抛出一个异常
-        throw new Error(`register error id= ${id}`);
       }
-    } catch (error) {
+    } catch (error: any) {
       const defaultLoginFailureMessage = '注册失败，请重试！';
       message.error(defaultLoginFailureMessage);
     }
@@ -60,11 +57,11 @@ const Register: React.FC = () => {
       <div className={styles.content}>
         <LoginForm
           submitter={{
-            searchConfig:{
-              submitText:'注册'
+            searchConfig: {
+              submitText: '注册'
             }
           }}
-          logo={<img alt="logo" src={SYSTEM_LOGO} />}
+          logo={<img alt="logo" src={SYSTEM_LOGO}/>}
           title="DK Dream Space💭"
           subTitle={<a href={BLOG_LINK} target="_blank" rel="noreferrer">DK Dream Space 您的梦境🤪</a>}
           initialValues={{
@@ -76,7 +73,7 @@ const Register: React.FC = () => {
           }}
         >
           <Tabs activeKey={type} onChange={setType}>
-            <Tabs.TabPane key="account" tab={'新用户注册'} />
+            <Tabs.TabPane key="account" tab={'新用户注册'}/>
           </Tabs>
 
           {type === 'account' && (
@@ -85,7 +82,7 @@ const Register: React.FC = () => {
                 name="userAccount"
                 fieldProps={{
                   size: 'large',
-                  prefix: <UserOutlined className={styles.prefixIcon} />,
+                  prefix: <UserOutlined className={styles.prefixIcon}/>,
                 }}
                 placeholder=" 请输入账号 "
                 rules={[
@@ -99,7 +96,7 @@ const Register: React.FC = () => {
                 name="userPassword"
                 fieldProps={{
                   size: 'large',
-                  prefix: <LockOutlined className={styles.prefixIcon} />,
+                  prefix: <LockOutlined className={styles.prefixIcon}/>,
                 }}
                 placeholder=" 请输入密码 "
                 rules={[
@@ -118,7 +115,7 @@ const Register: React.FC = () => {
                 name="checkPassword"
                 fieldProps={{
                   size: 'large',
-                  prefix: <LockOutlined className={styles.prefixIcon} />,
+                  prefix: <LockOutlined className={styles.prefixIcon}/>,
                 }}
                 placeholder=" 请再次输入密码 "
                 rules={[
@@ -133,12 +130,26 @@ const Register: React.FC = () => {
                   },
                 ]}
               />
+              <ProFormText
+                name="inviteCode"
+                fieldProps={{
+                  size: 'large',
+                  prefix: <UserOutlined className={styles.prefixIcon}/>,
+                }}
+                placeholder=" 请输入邀请码"
+                rules={[
+                  {
+                    required: true,
+                    message: '邀请码是必填项！',
+                  },
+                ]}
+              />
             </>
           )}
 
         </LoginForm>
       </div>
-      <Footer />
+      <Footer/>
     </div>
   );
 };

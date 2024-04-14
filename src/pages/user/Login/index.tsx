@@ -49,6 +49,7 @@ const Login: React.FC = () => {
       });
       //如果user存在
       if (user) {
+        console.log(user);
         const defaultLoginSuccessMessage = '登录成功！';
         message.success(defaultLoginSuccessMessage);
         await fetchUserInfo();
@@ -61,7 +62,6 @@ const Login: React.FC = () => {
         history.push(redirect || '/');
         return;
       }
-      console.log(user);
       // 如果失败去设置用户错误信息
       setUserLoginState(user);
     } catch (error) {

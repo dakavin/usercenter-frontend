@@ -24,7 +24,8 @@ export const initialStateConfig = {
 export const request: RequestConfig = {
   timeout: 100000,
   // prefix: "https://localhost:8080"
-  prefix: "/api"
+  // prefix 也可以不写，直接在对应方法的url地址，都加上/api即可
+  // prefix: "/api"
 };
 
 /**
@@ -41,7 +42,6 @@ export async function getInitialState(): Promise<{
     try {
       return await queryCurrentUser();
     } catch (error) {
-      console.log("error");
       history.push(loginPath);
     }
     return undefined;

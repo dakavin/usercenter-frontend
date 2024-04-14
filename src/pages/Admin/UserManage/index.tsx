@@ -1,10 +1,9 @@
-import { EllipsisOutlined, PlusOutlined } from '@ant-design/icons';
-import type { ActionType, ProColumns } from '@ant-design/pro-components';
-import { ProTable, TableDropdown } from '@ant-design/pro-components';
-import {Button, Dropdown, Image, Space, Tag} from 'antd';
-import { useRef } from 'react';
-import request from 'umi-request';
+import type {ActionType, ProColumns} from '@ant-design/pro-components';
+import {ProTable, TableDropdown} from '@ant-design/pro-components';
+import {Image} from 'antd';
+import {useRef} from 'react';
 import {searchUsers} from "@/services/ant-design-pro/api";
+
 export const waitTimePromise = async (time: number = 100) => {
   return new Promise((resolve) => {
     setTimeout(() => {
@@ -58,6 +57,11 @@ const columns: ProColumns<API.CurrentUser>[] = [
   {
     title:  '状态',
     dataIndex: 'userStatus',
+  },
+  {
+    title:  '邀请码',
+    dataIndex: 'inviteCode',
+    copyable: true
   },
   {
     title:  '角色',

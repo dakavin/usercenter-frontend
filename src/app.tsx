@@ -9,6 +9,7 @@ import defaultSettings from '../config/defaultSettings';
 import { currentUser as queryCurrentUser } from './services/ant-design-pro/api';
 
 const isDev = process.env.NODE_ENV === 'development';
+// alert(process.env.NODE_ENV)
 const loginPath = '/user/login';
 /**
  * 无序登录态页面

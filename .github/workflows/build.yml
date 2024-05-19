@@ -36,7 +36,7 @@ jobs:
       # 步骤4：安装依赖项
       # 运行 npm install 安装项目的所有依赖项
       - name: Install dependencies
-        run: npm i
+        run: npm ci
 
       # 步骤5：构建项目
       # 运行 npm run build 构建项目，将生成的文件放入 dist 文件夹
@@ -62,28 +62,18 @@ jobs:
           mkdir -p /docker-data/nginx/conf.d
           EOF
 
-      # 步骤8：传输dist前，压缩dist目录
-      - name: Compress dist files
-        run: tar -czvf dist.tar.gz -C dist .
-
-      - name: Copy compressed dist files via SSH
+      # 步骤8：通过 SSH 复制 dist 文件夹内容到服务器
+      - name: Copy dist files via SSH
         uses: appleboy/scp-action@v0.1.1
         with:
           host: ${{ secrets.SSH_HOST }}
           username: ${{ secrets.SSH_USER }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
-          source: "dist.tar.gz"
+          source: "dist/*"
           strip_components: 1 # 确保不会在目标路径中创建额外的目录层级。
           target: "/docker-data/nginx/html/usercenter-frontend/"
 
-      # 步骤9：服务器解压 dist压缩包
-      - name: Decompress dist files on server
-        run: |
-          ssh -tt -o StrictHostKeyChecking=no -i deploy_key ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} << 'EOF'
-          tar -xzvf /docker-data/nginx/html/usercenter-frontend/dist.tar.gz -C /docker-data/nginx/html/usercenter-frontend/
-          EOF
-
-      # 步骤10：通过 SSH 复制 SSL 证书到服务器
+      # 步骤9：通过 SSH 复制 SSL 证书到服务器
       - name: Copy SSL certs via SSH
         uses: appleboy/scp-action@v0.1.1
         with:
@@ -94,7 +84,7 @@ jobs:
           strip_components: 3
           target: "/docker-data/nginx/cert/usercenter-frontend-cert/"
 
-      # 步骤11：通过 SSH 复制 Nginx 配置文件到服务器
+      # 步骤10：通过 SSH 复制 Nginx 配置文件到服务器
       - name: Copy Nginx config via SSH
         uses: appleboy/scp-action@v0.1.1
         with:
@@ -105,7 +95,7 @@ jobs:
           strip_components: 2
           target: "/docker-data/nginx/conf.d/"
 
-      # 步骤12：重启 Nginx 容器
+      # 步骤11：重启 Nginx 容器
       - name: Restart Nginx container
         run: |
           ssh -o StrictHostKeyChecking=no -i deploy_key ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} << 'EOF'

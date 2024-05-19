@@ -36,7 +36,7 @@ jobs:
       # 步骤4：安装依赖项
       # 运行 npm install 安装项目的所有依赖项
       - name: Install dependencies
-        run: npm ci
+        run: npm i
 
       # 步骤5：构建项目
       # 运行 npm run build 构建项目，将生成的文件放入 dist 文件夹

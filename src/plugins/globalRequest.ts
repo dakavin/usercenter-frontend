@@ -13,7 +13,7 @@ import {stringify} from "querystring";
 const request = extend({
   credentials: 'include', // 默认请求是否带上cookie
   // requestType: 'form',
-  prefix : process.env.NODE_ENV === 'production' ? 'http://203.195.193.58:8080' : undefined
+  prefix : process.env.NODE_ENV === 'production' ? 'https://usercenter-backend.dakkk.top' : undefined
 });
 
 /**

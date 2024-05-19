@@ -76,14 +76,14 @@ jobs:
           strip_components: 1 # 确保不会在目标路径中创建额外的目录层级。
           target: "/docker-data/nginx/html/usercenter-frontend/"
 
-      # 步骤7：服务器解压 dist压缩包
+      # 步骤9：服务器解压 dist压缩包
       - name: Decompress dist files on server
         run: |
-          ssh -o StrictHostKeyChecking=no -i deploy_key ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} << 'EOF'
+          ssh -tt -o StrictHostKeyChecking=no -i deploy_key ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} << 'EOF'
           tar -xzvf /docker-data/nginx/html/usercenter-frontend/dist.tar.gz -C /docker-data/nginx/html/usercenter-frontend/
           EOF
 
-      # 步骤8：通过 SSH 复制 SSL 证书到服务器
+      # 步骤10：通过 SSH 复制 SSL 证书到服务器
       - name: Copy SSL certs via SSH
         uses: appleboy/scp-action@v0.1.1
         with:
@@ -94,7 +94,7 @@ jobs:
           strip_components: 3
           target: "/docker-data/nginx/cert/usercenter-frontend-cert/"
 
-      # 步骤9：通过 SSH 复制 Nginx 配置文件到服务器
+      # 步骤11：通过 SSH 复制 Nginx 配置文件到服务器
       - name: Copy Nginx config via SSH
         uses: appleboy/scp-action@v0.1.1
         with:
@@ -105,7 +105,7 @@ jobs:
           strip_components: 2
           target: "/docker-data/nginx/conf.d/"
 
-      # 步骤10：重启 Nginx 容器
+      # 步骤12：重启 Nginx 容器
       - name: Restart Nginx container
         run: |
           ssh -o StrictHostKeyChecking=no -i deploy_key ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} << 'EOF'

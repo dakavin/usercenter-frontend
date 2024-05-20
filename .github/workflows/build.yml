@@ -37,6 +37,9 @@ jobs:
       # 运行 npm install 安装项目的所有依赖项
       - name: Add Taobao registry and install dependencies
         run: |
+        # 解决直接设置镜像源可能导致的卡住问题
+          npm install -g nrm
+          nrm use taobao
           npm i
 
       # 步骤5：构建项目

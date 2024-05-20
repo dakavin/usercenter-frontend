@@ -17,14 +17,14 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
-      # 步骤2：缓存 Yarn 模块
-      - name: Cache Yarn modules
+      # 步骤2：缓存 Node.js 模块
+      - name: Cache Node.js modules
         uses: actions/cache@v2
         with:
-          path: ~/.cache/yarn
-          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
+          path: ~/.npm
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
           restore-keys: |
-            ${{ runner.os }}-yarn-
+            ${{ runner.os }}-node-
 
       # 步骤3：设置 Node.js 环境
       # 使用 actions/setup-node@v2 设置 Node.js 版本为 20.12.0
@@ -33,23 +33,17 @@ jobs:
         with:
           node-version: '20.12.0'
 
-      # 步骤4：安装 Yarn
-      - name: Install Yarn
-        run: |
-          npm install -g yarn
-          yarn config set registry https://registry.npmmirror.com
-
-      # 步骤5：安装依赖项
-      # 使用 yarn 安装项目的所有依赖项
+      # 步骤4：运行 npm install 安装项目的所有依赖项
       - name: Install dependencies
-        run: yarn install
+        run: |
+          npm i
 
       # 步骤5：构建项目
-      # 运行 yarn build 构建项目，将生成的文件放入   dist 文件夹
+      # 运行 npm run build 构建项目，将生成的文件放入 dist 文件夹
       - name: Build project
         run: |
           export NODE_OPTIONS=--openssl-legacy-provider
-          yarn build -- --mode production --profile --json > build-stats.json
+          npm run build -- --mode production --profile --json > build-stats.json
 
       # 步骤6：设置 SSH Key
       - name: Setup SSH Key

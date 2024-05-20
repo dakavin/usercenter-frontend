@@ -1,6 +1,6 @@
 name: Deploy usercenter-frontend
 
-# 触发条件：当代码推送到 master  分支时触发工作流
+# 触发条件：当代码推送到 master 分支时触发工作流
 on:
   push:
     branches:
@@ -37,7 +37,6 @@ jobs:
       # 运行 npm install 安装项目的所有依赖项
       - name: Add Taobao registry and install dependencies
         run: |
-          npm config set registry https://registry.npmmirror.com
           npm i
 
       # 步骤5：构建项目

@@ -34,10 +34,9 @@ jobs:
           node-version: '20.12.0'
 
       # 步骤4：添加淘宝镜像源并安装依赖项
-      # 运行 npm install 安装项目的所有依赖项
+      # 使用nrm修改镜像解决直接设置镜像源可能导致的卡住问题
       - name: Add Taobao registry and install dependencies
         run: |
-        # 解决直接设置镜像源可能导致的卡住问题
           npm install -g nrm
           nrm use taobao
           npm i
